@@ -121,10 +121,10 @@ public class Purse {
     		
     		if (amount <= 0 || getBalance() < amount || money.size() == 0) return null;
     		
-    		for (int n = 0; n < money.size(); n++) {
-			if (amountNeededToWithdraw >= money.get(n).getValue()) {
-				amountNeededToWithdraw -= money.get(n).getValue();
-				tempList.add(money.get(n));
+    		for (Coin coin : money) {
+			if (amountNeededToWithdraw >= coin.getValue()) {
+				amountNeededToWithdraw -= coin.getValue();
+				tempList.add(coin);
 			}
 			
 			if (amountNeededToWithdraw == 0) break;
