@@ -3,7 +3,7 @@ package coinpurse;
 /**
  * A main class to create objects and connect objects together.
  * The user interface needs a reference to coin purse.
- * @author your name
+ * @author Kunyaruk Katebunlu
  */
 public class Main {
 
