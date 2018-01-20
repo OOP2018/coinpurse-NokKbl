@@ -48,7 +48,6 @@ public class Purse {
     		for (Coin coin : money) { balance += coin.getValue();	 }
 		return balance; 
 	}
-
     
     /**
      * Return the capacity of the coin purse.
@@ -127,10 +126,11 @@ public class Purse {
 				amountNeededToWithdraw -= money.get(n).getValue();
 				tempList.add(money.get(n));
 			}
+			
 			if (amountNeededToWithdraw == 0) break;
     		}
     		
-		if ( amountNeededToWithdraw != 0 ) {	
+		if (amountNeededToWithdraw != 0) {	
 			// failed. Don't change the contents of the purse.
 			return null;
 		}
