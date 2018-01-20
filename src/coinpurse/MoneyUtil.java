@@ -16,9 +16,7 @@ public class MoneyUtil {
 	 * @param coins is list of coins that need to print
 	 */
 	public static void printCoins(List<Coin> coins) {
-		for (Coin coin : coins) {
-			System.out.print(coin+ " ");
-		}
+		for (Coin coin : coins) System.out.print(coin+ " ");
 		System.out.println();
 	}
 	
@@ -77,7 +75,6 @@ public class MoneyUtil {
 		for (Coin coin : new ArrayList<>(coins)) {
 			if(!coin.getCurrency().equals(currency)) coins.remove(coin);
 		}
-		
 		return coins;
 	}
 	

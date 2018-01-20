@@ -62,13 +62,10 @@ public class Coin implements Comparable<Coin> {
 	@Override
 	public int compareTo (Coin coin) {
 		double compare = this.getValue() - coin.getValue();
-		if (compare < 0) {
-			return -1;
-		}else if (compare > 0) {
-			return 1;
-		}else {
-			return 0;
-		}
+		
+		if (compare < 0) return -1;
+		else if (compare > 0) return 1;
+		else return 0;
 	}
 	
 	/**
