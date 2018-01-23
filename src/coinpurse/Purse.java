@@ -38,6 +38,7 @@ public class Purse {
 	 */
 	public int count() {
 		int count = money.size();
+		
 		return count;
 	}
 
@@ -48,9 +49,8 @@ public class Purse {
 	 */
 	public double getBalance() {
 		double balance = 0;
-		for (Coin coin : money) {
-			balance += coin.getValue();
-		}
+		
+		for (Coin coin : money) balance += coin.getValue();
 		return balance;
 	}
 
@@ -84,9 +84,8 @@ public class Purse {
 		// if the purse is already full then can't insert anything.
 		boolean purseFull = isFull();
 
-		if (purseFull || coin.getValue() <= 0) {
-			return false;
-		} else {
+		if (purseFull || coin.getValue() <= 0) return false;
+		else {
 			money.add(coin);
 			return true;
 		}
@@ -108,9 +107,7 @@ public class Purse {
 		Collections.sort(money);
 		Collections.reverse(money);
 
-		if (amount <= 0 || getBalance() < amount || money.size() == 0) {
-			return null;
-		}
+		if (amount <= 0 || getBalance() < amount || money.size() == 0) return null;
 
 		for (Coin coin : money) {
 			if (amountNeededToWithdraw >= coin.getValue()) {
@@ -118,9 +115,7 @@ public class Purse {
 				tempList.add(coin);
 			}
 
-			if (amountNeededToWithdraw == 0) {
-				break;
-			}
+			if (amountNeededToWithdraw == 0) break;
 		}
 
 		if (amountNeededToWithdraw != 0) {
@@ -131,12 +126,7 @@ public class Purse {
 		// Success.
 		// Remove the coins you want to withdraw from purse,
 		// and return them as an array.
-		// Use list.toArray( array[] ) to copy a list into an array.
-		// toArray returns a reference to the array itself.
-		for (Coin coin : tempList) {
-			money.remove(coin);
-		}
-
+		for (Coin coin : tempList) money.remove(coin);
 		Coin[] withdrawCoin = new Coin[tempList.size()];
 		return tempList.toArray(withdrawCoin);
 	}
