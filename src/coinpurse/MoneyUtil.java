@@ -1,6 +1,8 @@
 package coinpurse;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  * @author Kunyaruk Katebunlu
  */
 public class MoneyUtil {
-
+	
 	/**
 	 * Print a list of the coins.
 	 * @param coins is list of coins that need to print
@@ -21,11 +23,21 @@ public class MoneyUtil {
 	}
 	
 	/**
+	 * Print a list of the money.
+	 * @param val is list of money that need to print
+	 */
+	public static void printVal(List<Valuable> val) {
+		for (Valuable valuable : val) System.out.print(valuable+" ");
+		System.out.println();
+	}
+	
+	/**
 	 * To demonstrate that compareTo() method is correct and
 	 * sort the coins by value.
 	 */
-	public static void sortCoin() {
+	public static void sortAndCompareCoin() {
 		List<Coin> coins = new ArrayList<Coin>();
+		
 		coins.add(new Coin(10.0, "Baht")); // index 0
 		coins.add(new Coin(0.5, "Baht")); // index 1
 		coins.add(new Coin(2.0, "Baht")); // index 2
@@ -52,17 +64,15 @@ public class MoneyUtil {
 		System.out.println("-----------");
 		
 		// sort a list of coins
-		java.util.Collections.sort(coins);
-		printCoins(coins);
-		System.out.println("-----------");
-		
-		// Use sortCoins() method to sort a list of coins and print
 		sortCoins(coins);
 		System.out.println("-----------");
 		
 		// Filter only coin that has same currency
-		filterByCurrency(coins, "Baht");
-		printCoins(coins);
+		List<Valuable> money = new ArrayList<Valuable>();
+		money.addAll(coins);
+		sortMoney(money);
+		filterByCurrency(money, "Baht");
+		printVal(money);
 	}
 	
 	/**
@@ -71,11 +81,20 @@ public class MoneyUtil {
 	 * @param currency is currency value that want to use
 	 * @return list of coins with the same currency value
 	 */
-	public static List<Coin> filterByCurrency(List<Coin> coins, String currency) {
-		for (Coin coin : new ArrayList<>(coins)) {
-			if(!coin.getCurrency().equals(currency)) coins.remove(coin);
+	public static List<Valuable> filterByCurrency(List<Valuable> money, String currency) {
+		for (Valuable value : new ArrayList<>(money)) {
+			if(!value.getCurrency().equals(currency)) money.remove(value);
 		}
-		return coins;
+		return null;
+	}
+	
+	/**
+	 * Sort money by use the value of the valuable and print.
+	 * @param val is the list of money that want to sort
+	 */
+	public static void sortMoney(List<Valuable> val) {
+		Comparator<Valuable> cmp = new ValueComparator();
+		Collections.sort(val, cmp);
 	}
 	
 	/**
@@ -83,11 +102,11 @@ public class MoneyUtil {
 	 * @param coins is the list of coins that want to sort
 	 */
 	public static void sortCoins(List<Coin> coins) {
-		java.util.Collections.sort(coins);
+		Collections.sort(coins);
 		printCoins(coins);
 	}
 	
 	public static void main(String[] args) {
-		sortCoin();
+		sortAndCompareCoin();
 	}
 }

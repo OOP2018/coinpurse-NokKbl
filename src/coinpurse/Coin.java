@@ -4,7 +4,7 @@ package coinpurse;
  * Coin represents coinage (money) with a fixed value and currency.
  * @author Kunyaruk Katebunlu
  */
-public class Coin implements Comparable<Coin> {
+public class Coin implements Comparable<Coin>, Valuable {
 	/** the value of the coin */
 	private double value;
 	/** the currency value of the coin */
@@ -40,19 +40,6 @@ public class Coin implements Comparable<Coin> {
 	}
 	
 	/**
-	 * Compares this object to the specified object.
-	 * @param arg is the object that use to compare with this object
-	 * @return true if the value and the currency of the objects are the same
-	 */
-	@Override
-	public boolean equals (Object arg) {
-		if (arg == null) return false;
-		if (arg.getClass() != this.getClass()) return false;
-		Coin coin = (Coin) arg;
-		return this.getValue() == coin.getValue() && this.getCurrency().equals(coin.getCurrency());
-	}
-	
-	/**
 	 * Compares this object with the specified object for order.
 	 * @param coin is the object that want to compare the value with this value
 	 * @return a negative integer if value of this object is less than value of the specified object,
@@ -66,6 +53,19 @@ public class Coin implements Comparable<Coin> {
 		if (compare < 0) return -1;
 		else if (compare > 0) return 1;
 		else return 0;
+	}
+	
+	/**
+	 * Compares this object to the specified object.
+	 * @param arg is the object that use to compare with this object
+	 * @return true if the value and the currency of the objects are the same
+	 */
+	@Override
+	public boolean equals (Object arg) {
+		if (arg == null) return false;
+		if (arg.getClass() != this.getClass()) return false;
+		Coin coin = (Coin) arg;
+		return this.getValue() == coin.getValue() && this.getCurrency().equals(coin.getCurrency());
 	}
 	
 	/**

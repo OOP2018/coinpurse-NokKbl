@@ -82,10 +82,17 @@ public class ConsoleDialog {
         Scanner scanline = new Scanner(inline);
         while( scanline.hasNextDouble() ) {
             double value = scanline.nextDouble();
-            Coin coin = makeMoney(value);
-            System.out.printf("Deposit %s... ", coin.toString() );
-            boolean ok = purse.insert(coin);
-            System.out.println( (ok? "ok" : "FAILED") );
+            if(value < 20) {
+            		Valuable coin = makeMoney(value);
+            		System.out.printf("Deposit %s... ", coin.toString() );
+            		boolean ok = purse.insert(coin);
+            		System.out.println( (ok? "ok" : "FAILED") );
+            } else {
+            		Valuable bankNote = makeMoney(value);
+            		System.out.printf("Deposit %s... ", bankNote.toString() );
+            		boolean ok = purse.insert(bankNote);
+            		System.out.println( (ok? "ok" : "FAILED") );
+            }
         }
         if ( scanline.hasNext() )
             System.out.println("Invalid input: "+scanline.next() );
@@ -108,13 +115,13 @@ public class ConsoleDialog {
         
         if ( scanline.hasNextDouble() ) {
              double amount = scanline.nextDouble( );
-             Coin [] coins = purse.withdraw(amount);
-             if ( coins == null ) 
+             Valuable [] value = purse.withdraw(amount);
+             if ( value == null ) 
                 System.out.printf("Sorry, couldn't withdraw %.2g %s\n", amount, CURRENCY);
              else {
                 System.out.print("You withdrew:");
-                for(int k=0; k<coins.length; k++) {
-                	System.out.print((k==0?" ":", ") + coins[k].toString() );
+                for(int k=0; k<value.length; k++) {
+                	System.out.print((k==0?" ":", ") + value[k].toString() );
                 }
                 System.out.println();
             }
@@ -124,8 +131,9 @@ public class ConsoleDialog {
     }
     
     /** Make a Coin (or BankNote or whatever) using requested value. */
-    private Coin makeMoney(double value) {
-    	return new Coin(value, CURRENCY);
+    private Valuable makeMoney(double value) {
+    	if(value < 20) return new Coin(value, CURRENCY);
+    	else return new BankNote(value, CURRENCY);
     }
 
 }
