@@ -27,7 +27,10 @@ public class MoneyUtil {
 	 * @param val is list of money that need to print
 	 */
 	public static void printVal(List<Valuable> val) {
-		for (Valuable valuable : val) System.out.print(valuable+" ");
+		for (Valuable valuable : val) {
+			if(valuable.getValue() == 0) System.out.print("");
+			else System.out.print(valuable+" ");
+		}
 		System.out.println();
 	}
 	
@@ -63,10 +66,6 @@ public class MoneyUtil {
 		printCoins(coins);
 		System.out.println("-----------");
 		
-		// sort a list of coins
-		sortCoins(coins);
-		System.out.println("-----------");
-		
 		// Filter only coin that has same currency
 		List<Valuable> money = new ArrayList<Valuable>();
 		money.addAll(coins);
@@ -95,15 +94,6 @@ public class MoneyUtil {
 	public static void sortMoney(List<Valuable> val) {
 		Comparator<Valuable> cmp = new ValueComparator();
 		Collections.sort(val, cmp);
-	}
-	
-	/**
-	 * Sort coins by use the value of the coins and print.
-	 * @param coins is the list of coins that want to sort
-	 */
-	public static void sortCoins(List<Coin> coins) {
-		Collections.sort(coins);
-		printCoins(coins);
 	}
 	
 	public static void main(String[] args) {

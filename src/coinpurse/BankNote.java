@@ -26,10 +26,11 @@ public class BankNote implements Valuable {
 	}
 	
 	/**
-	 * Get serial number of the purse.
-	 * @return Purse's serial number
+	 * Get unique serial number of the banknote.
+	 * @return Banknote's serial number
 	 */
 	public long getSerial() {
+		nextSerialNumber++;
 		return this.serialNumber;
 	}
 	

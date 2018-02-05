@@ -19,7 +19,7 @@ public class ValueComparator implements Comparator<Valuable>{
 			else if (compare > 0) return 1;
 			else return 0;
 		}
-		return Integer.valueOf(a.getCurrency().length()).compareTo(Integer.valueOf(b.getCurrency().length()));
+		return (a.getCurrency()).compareTo(b.getCurrency());
 	}
 
 }
