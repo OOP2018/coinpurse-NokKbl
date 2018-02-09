@@ -2,6 +2,11 @@ package coinpurse;
 
 import java.util.Comparator;
 
+/**
+ * Compare two objects that implement Valuable by currency.
+ * If both objects have the same currency, order them by value.
+ * @author Kunyaruk Katebunlu
+ */
 public class ValueComparator implements Comparator<Valuable>{
 
 	/**
@@ -12,14 +17,14 @@ public class ValueComparator implements Comparator<Valuable>{
 	 */
 	@Override
 	public int compare(Valuable a, Valuable b) {
-		if(a.getCurrency().equals(b.getCurrency())) {
+		if(a.getCurrency().equalsIgnoreCase(b.getCurrency())) {
 			double compare = a.getValue() - b.getValue();
 			
 			if (compare < 0) return -1;
 			else if (compare > 0) return 1;
 			else return 0;
 		}
-		return (a.getCurrency()).compareTo(b.getCurrency());
+		return (a.getCurrency()).compareToIgnoreCase(b.getCurrency());
 	}
 
 }

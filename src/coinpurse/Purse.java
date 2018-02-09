@@ -35,9 +35,7 @@ public class Purse {
 	 * @return the amount of money in the purse
 	 */
 	public int count() {
-		int count = money.size();
-		
-		return count;
+		return money.size();
 	}
 
 	/**
@@ -46,9 +44,7 @@ public class Purse {
 	 */
 	public double getBalance() {
 		double balance = 0;
-		
 		for (Valuable a_money : money) balance += a_money.getValue();
-		
 		return balance;
 	}
 
@@ -72,39 +68,48 @@ public class Purse {
 	/**
 	 * Insert money into the purse. The money is only inserted if the purse has
 	 * space for it and the money has positive value. No worthless money!
-	 * @param insert_money is a Valuable object to insert into purse
+	 * @param insertAmount is a Valuable object to insert into purse
 	 * @return true if money inserted, false if can't insert
 	 */
-	public boolean insert(Valuable insert_money) {
+	public boolean insert(Valuable insertAmount) {
 		boolean purseFull = isFull();
 
-		if (purseFull || insert_money.getValue() <= 0) return false;
+		if (purseFull || insertAmount.getValue() <= 0) return false;
 		else {
-			money.add(insert_money);
+			money.add(insertAmount);
 			return true;
 		}
 	}
-
+	
 	/**
-	 * Withdraw the requested amount of money. Return an array of Valuables withdrawn
-	 * from purse, or return null if cannot withdraw the amount requested.
+	 * Withdraw the requested amount of money that have same currency as the parameter.
+	 * Return an array of Valuables withdrawn from purse, or return null if cannot
+	 * withdraw the amount requested.
 	 * @param amount is the amount to withdraw
 	 * @return array of Valuable objects for money withdrawn, or null if cannot withdraw
 	 *         requested amount.
 	 */
-	public Valuable[] withdraw(double amount) {
-		double amountNeededToWithdraw = amount;
-		List<Valuable> tempList = new ArrayList<Valuable>();
+	public Valuable[] withdraw(Valuable amount) {
+		List<Valuable> moneyCopy = new ArrayList<Valuable>();
+		
+		moneyCopy.addAll(money);
+		for (Valuable valuable : new ArrayList<>(moneyCopy)) {
+			if(!amount.getCurrency().equalsIgnoreCase(valuable.getCurrency())) moneyCopy.remove(valuable);
+		}
+		
+		if(amount.getValue() <= 0 || amount == null || money.isEmpty()) return null;
 		
 		Collections.sort(money, cmp);
 		Collections.reverse(money);
-
-		for (Valuable value : money) {
+		
+		double amountNeededToWithdraw = amount.getValue();
+		List<Valuable> tempList = new ArrayList<Valuable>();
+		
+		for (Valuable value : moneyCopy) {
 			if(amountNeededToWithdraw >= value.getValue()) {
 				amountNeededToWithdraw -= value.getValue();
 				tempList.add(value);
 			}
-			
 			if(amountNeededToWithdraw == 0) break;
 		}
 		
@@ -112,6 +117,18 @@ public class Purse {
 		for (Valuable val : tempList) money.remove(val);
 		Valuable[] withdrawCoin = new Valuable[tempList.size()];
 		return tempList.toArray(withdrawCoin);
+	}
+	
+	/**
+	 * Withdraw the requested amount of money with default currency (Baht).
+	 * Return an array of Valuables withdrawn from purse, or return null 
+	 * if cannot withdraw the amount requested.
+	 * @param amount is the amount to withdraw
+	 * @return array of Valuable objects for money withdrawn, or null if cannot withdraw
+	 *         requested amount.
+	 */
+	public Valuable[] withdraw(double amount) {
+		return withdraw(new Money(amount, "Baht"));
 	}
 
 	/**

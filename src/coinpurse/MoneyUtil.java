@@ -12,6 +12,7 @@ import java.util.List;
  * @author Kunyaruk Katebunlu
  */
 public class MoneyUtil {
+	private static Comparator<Valuable> cmp = new ValueComparator();
 	
 	/**
 	 * Print a list of the coins.
@@ -41,29 +42,35 @@ public class MoneyUtil {
 	public static void sortAndCompareCoin() {
 		List<Coin> coins = new ArrayList<Coin>();
 		
-		coins.add(new Coin(10.0, "Baht")); // index 0
-		coins.add(new Coin(0.5, "Baht")); // index 1
-		coins.add(new Coin(2.0, "Baht")); // index 2
-		coins.add(new Coin(0.25, "Baht")); // index 3
+		coins.add(new Coin(10.0, "Baht"));
+		coins.add(new Coin(0.5, "Baht"));
+		coins.add(new Coin(2.0, "Baht"));
+		coins.add(new Coin(0.25, "Baht"));
 		
 		// same value but difference currency
-		coins.add(new Coin(1.0, "Baht")); // index 4
-		coins.add(new Coin(1.0, "Rupie")); // index 5
-		
-		// negative value
-		coins.add(new Coin(-1.0, "Baht")); // index 6
-		
-		// Test compareTo() method (unsorted value and ignore currency)
-		// result < 0 : index 1 (0.5) has order before index 2 (2.0) --> yes
-		System.out.println(coins.get(1).compareTo(coins.get(2)));
-		// result > 0 : index 0 (10.0) has order after index 3 (0.25) --> yes
-		System.out.println(coins.get(0).compareTo(coins.get(3)));
-		// result = 0 : 1.0 (index 4) has the same order with 1.0 (index 5) --> yes
-		System.out.println(coins.get(4).compareTo(coins.get(5)));
-		System.out.println("-----------");
+		coins.add(new Coin(1.0, "Baht"));
+		coins.add(new Coin(1.0, "Rupie"));
+		coins.add(new Coin(1.0, "baht"));
 		
 		// unsorted a list of coins
+		System.out.println("Unsorted money");
 		printCoins(coins);
+				
+		System.out.println("-----------");
+		// sorted
+		Collections.sort(coins, cmp);
+		System.out.println("Sorted money");
+		printCoins(coins);
+		
+		System.out.println("-----------");
+		// Test compareTo() method
+		System.out.printf("%.2f compare to %.2f\n", coins.get(0).getValue(), coins.get(2).getValue());
+		System.out.println("Result: " + coins.get(0).compareTo(coins.get(2)));
+		System.out.printf("%.2f compare to %.2f\n", coins.get(3).getValue(), coins.get(1).getValue());
+		System.out.println("Result: " + coins.get(3).compareTo(coins.get(1)));
+		System.out.printf("%.2f compare to %.2f\n", coins.get(4).getValue(), coins.get(4).getValue());
+		System.out.println("Result: " + coins.get(4).compareTo(coins.get(4)));
+		
 		System.out.println("-----------");
 		
 		// Filter only coin that has same currency
@@ -71,6 +78,7 @@ public class MoneyUtil {
 		money.addAll(coins);
 		sortMoney(money);
 		filterByCurrency(money, "Baht");
+		System.out.println("Filter money");
 		printVal(money);
 	}
 	
@@ -82,7 +90,7 @@ public class MoneyUtil {
 	 */
 	public static List<Valuable> filterByCurrency(List<Valuable> money, String currency) {
 		for (Valuable value : new ArrayList<>(money)) {
-			if(!value.getCurrency().equals(currency)) money.remove(value);
+			if(!value.getCurrency().equalsIgnoreCase(currency)) money.remove(value);
 		}
 		return null;
 	}
@@ -92,7 +100,6 @@ public class MoneyUtil {
 	 * @param val is the list of money that want to sort
 	 */
 	public static void sortMoney(List<Valuable> val) {
-		Comparator<Valuable> cmp = new ValueComparator();
 		Collections.sort(val, cmp);
 	}
 	

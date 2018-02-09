@@ -22,7 +22,8 @@ import org.junit.Test;
 public class PurseTest {
 	/** tolerance for comparing two double values */
 	private static final double TOL = 1.0E-6;
-	private static final String CURRENCY = "BTC";
+	/** default currency */
+	private static final String CURRENCY = "Baht";
 	
     /**
      * Sets up the test fixture.
@@ -192,6 +193,118 @@ public class PurseTest {
 		assertNull( purse.withdraw(21) );
 		purse.insert( makeCoin(20) ); // now it has 20 + 20
 		assertNull( purse.withdraw(30) );
+	}
+	
+	@Test(timeout=1000)
+	public void testValuableWithdraw() {
+		// withdraw easy one
+		Purse purse = new Purse(10);
+		purse.insert(new Money(5, "Baht"));
+		assertEquals(5, purse.getBalance(), TOL);
+		purse.withdraw(new Money(5, "Dollar"));
+		assertEquals(5, purse.getBalance(), TOL);
+		purse.withdraw(new Money(5, "Baht"));
+		assertEquals(0, purse.getBalance(), TOL);
+		
+		// withdraw multiple money
+		Purse newPurse = new Purse(5);
+		newPurse.insert(new Money(5, "Baht"));
+		newPurse.insert(new Money(10, "Baht"));
+		newPurse.insert(new Money(1, "Baht"));
+		newPurse.insert(new Money(20, "Baht"));
+		newPurse.insert(new Money(45, "Baht"));
+		// this value will not insert
+		newPurse.insert(new Money(15, "Baht"));
+		
+		assertEquals(81, newPurse.getBalance(), TOL);
+		newPurse.withdraw(new Money(6, "Baht"));
+		assertEquals(75, newPurse.getBalance(), TOL);
+		newPurse.withdraw(new Money(100, "Baht"));
+		assertEquals(75, newPurse.getBalance(), TOL);
+		newPurse.withdraw(new Money(10, "Yen"));
+		assertEquals(75, newPurse.getBalance(), TOL);
+		newPurse.withdraw(new Money(75, "Baht"));
+		assertEquals(0, newPurse.getBalance(), TOL);
+		
+		purse = new Purse(4);
+	    purse.insert(new Money(20, "Baht"));
+	    purse.insert(new Money(30, "Baht"));
+	    purse.insert(new Money(40, "Baht"));
+	    
+	    purse.withdraw(new Money(50,"Baht"));
+	    assertEquals(40, purse.getBalance(), TOL);
+	}
+	
+	@Test(timeout=100)
+	public void testMultipleCurrency() {		
+		Purse purse = new Purse(5);
+		purse.insert(new Money(10, "Cent"));
+		purse.insert(new Money(20, "Baht"));
+		purse.insert(new Money(20, "Dollar"));
+		purse.insert(new Money(30, "Cent"));
+		purse.insert(new Money(35,"Baht"));
+		//must not insert these two money
+		purse.insert(new Money(40, "Baht"));
+		purse.insert(new Money(20, "Dollar"));
+		
+		assertEquals(115, purse.getBalance(), TOL);
+		purse.withdraw(new Money(55,"Baht"));
+		assertEquals(60, purse.getBalance(), TOL);
+		purse.withdraw(new Money(30,"Dollar"));
+		assertEquals(60, purse.getBalance(), TOL);
+		purse.withdraw(new Money(40,"Cent"));
+		assertEquals(20, purse.getBalance(),TOL);
+		purse.withdraw(new Money(20,"Dollar"));
+		assertEquals(0, purse.getBalance(),TOL);
+		
+		purse = new Purse(6);
+	    purse.insert(new Money(20, "Baht"));
+	    purse.insert(new Money(30, "Baht"));
+	    purse.insert(new Money(40, "Baht"));
+	    purse.insert(new Money(30, "Yen"));
+	    purse.insert(new Money(50, "Baht"));
+	    
+	    purse.withdraw(new Money(50,"Yen"));
+	    assertEquals(170, purse.getBalance(), TOL);
+	    purse.withdraw(new Money(90,"Baht"));
+	    assertEquals(80, purse.getBalance(), TOL);
+	    
+		purse = new Purse(8);
+        purse.insert(new Money(40, "Baht"));
+        purse.insert(new Money(20, "baht"));
+        purse.insert(new Money(20, "baht"));
+        purse.insert(new Money(50, "Baht"));
+        purse.insert(new Money(10, "yen"));
+        purse.insert(new Money(20, "Yen"));
+        //Withdraw exceed money.
+        purse.withdraw(new Money(100, "Baht"));
+        assertEquals(160, purse.getBalance(), TOL);
+        //Withdraw test capital alphabets.
+        purse.withdraw(new Money(30, "Yen"));
+        assertEquals(130, purse.getBalance(), TOL);
+        purse.withdraw(new Money(90, "Baht"));
+        assertEquals(40, purse.getBalance(), TOL);
+        purse.withdraw(new Money(40, "baht"));
+        assertEquals(0, purse.getBalance(), TOL);
+	}
+	
+	@Test(timeout=1000)
+	public void testEquals() {
+		Valuable c = new Coin(5, "Baht");
+		Valuable c1 = new Coin(5, "Baht");
+		Valuable c2 = new Coin(10, "Baht");
+		Valuable c3 = new Coin(5, "Dollar");
+		Valuable b = new BankNote(5, "Baht");
+		Valuable b1 = new BankNote(20, "Baht");
+		Valuable b2 = new BankNote(20, "Baht");
+		Valuable b3 = new BankNote(20, "Dollar");
+		
+		assertTrue(c.equals(c1));
+		assertFalse(c.equals(c2));
+		assertFalse(c.equals(c3));
+		assertTrue(b1.equals(b2));
+		assertFalse(b1.equals(b3));
+		assertFalse(c1.equals(b));
 	}
 	
 	/**
