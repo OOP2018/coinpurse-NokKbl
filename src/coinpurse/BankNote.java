@@ -22,7 +22,7 @@ public class BankNote implements Valuable {
 	public BankNote(double value, String currency) {
 		this.value = value;
 		this.currency = currency;
-		serialNumber = nextSerialNumber;
+		serialNumber = nextSerialNumber++;
 	}
 	
 	/**
@@ -30,7 +30,6 @@ public class BankNote implements Valuable {
 	 * @return Banknote's serial number
 	 */
 	public long getSerial() {
-		nextSerialNumber++;
 		return this.serialNumber;
 	}
 	
