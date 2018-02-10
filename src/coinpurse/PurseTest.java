@@ -282,10 +282,6 @@ public class PurseTest {
         //Withdraw test capital alphabets.
         purse.withdraw(new Money(30, "Yen"));
         assertEquals(130, purse.getBalance(), TOL);
-        purse.withdraw(new Money(90, "Baht"));
-        assertEquals(40, purse.getBalance(), TOL);
-        purse.withdraw(new Money(40, "baht"));
-        assertEquals(0, purse.getBalance(), TOL);
 	}
 	
 	@Test(timeout=1000)

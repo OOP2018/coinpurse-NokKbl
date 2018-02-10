@@ -101,7 +101,7 @@ public class Purse {
 		
 		Collections.sort(money, cmp);
 		Collections.reverse(money);
-		
+
 		double amountNeededToWithdraw = amount.getValue();
 		List<Valuable> tempList = new ArrayList<Valuable>();
 		
