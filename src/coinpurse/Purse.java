@@ -99,8 +99,8 @@ public class Purse {
 		
 		if(amount.getValue() <= 0 || amount == null || money.isEmpty()) return null;
 		
-		Collections.sort(money, cmp);
-		Collections.reverse(money);
+		Collections.sort(moneyCopy, cmp);
+		Collections.reverse(moneyCopy);
 
 		double amountNeededToWithdraw = amount.getValue();
 		List<Valuable> tempList = new ArrayList<Valuable>();

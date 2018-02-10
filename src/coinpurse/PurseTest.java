@@ -225,14 +225,6 @@ public class PurseTest {
 		assertEquals(75, newPurse.getBalance(), TOL);
 		newPurse.withdraw(new Money(75, "Baht"));
 		assertEquals(0, newPurse.getBalance(), TOL);
-		
-		purse = new Purse(4);
-	    purse.insert(new Money(20, "Baht"));
-	    purse.insert(new Money(30, "Baht"));
-	    purse.insert(new Money(40, "Baht"));
-	    
-	    purse.withdraw(new Money(50,"Baht"));
-	    assertEquals(40, purse.getBalance(), TOL);
 	}
 	
 	@Test(timeout=100)
