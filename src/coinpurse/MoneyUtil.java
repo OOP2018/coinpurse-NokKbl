@@ -77,9 +77,8 @@ public class MoneyUtil {
 		List<Valuable> money = new ArrayList<Valuable>();
 		money.addAll(coins);
 		sortMoney(money);
-		filterByCurrency(money, "Baht");
 		System.out.println("Filter money");
-		printVal(money);
+		printVal(filterByCurrency(money, "Baht"));
 	}
 	
 	/**
@@ -89,10 +88,12 @@ public class MoneyUtil {
 	 * @return list of coins with the same currency value
 	 */
 	public static List<Valuable> filterByCurrency(List<Valuable> money, String currency) {
-		for (Valuable value : new ArrayList<>(money)) {
-			if(!value.getCurrency().equalsIgnoreCase(currency)) money.remove(value);
+		List<Valuable> moneyCopy = new ArrayList<Valuable>();
+		moneyCopy.addAll(money);
+		for (Valuable value : new ArrayList<>(moneyCopy)) {
+			if(!value.getCurrency().equalsIgnoreCase(currency)) moneyCopy.remove(value);
 		}
-		return null;
+		return moneyCopy;
 	}
 	
 	/**

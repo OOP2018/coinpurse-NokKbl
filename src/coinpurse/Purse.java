@@ -13,6 +13,9 @@ import java.util.Comparator;
 public class Purse {
 	/** Collection of objects in the purse. */
 	private List<Valuable> money;
+	/** default currency */
+	private static final String CURRENCY = "Baht";
+	
 	/**
 	 * Capacity is maximum number of items the purse can hold. Capacity is set when
 	 * the purse is created and cannot be changed.
@@ -90,12 +93,7 @@ public class Purse {
 	 *         requested amount.
 	 */
 	public Valuable[] withdraw(Valuable amount) {
-		List<Valuable> moneyCopy = new ArrayList<Valuable>();
-		
-		moneyCopy.addAll(money);
-		for (Valuable valuable : new ArrayList<>(moneyCopy)) {
-			if(!amount.getCurrency().equalsIgnoreCase(valuable.getCurrency())) moneyCopy.remove(valuable);
-		}
+		List<Valuable> moneyCopy = MoneyUtil.filterByCurrency(money, amount.getCurrency());
 		
 		if(amount.getValue() <= 0 || amount == null || money.isEmpty()) return null;
 		
@@ -128,7 +126,7 @@ public class Purse {
 	 *         requested amount.
 	 */
 	public Valuable[] withdraw(double amount) {
-		return withdraw(new Money(amount, "Baht"));
+		return withdraw(new Money(amount, CURRENCY));
 	}
 
 	/**
