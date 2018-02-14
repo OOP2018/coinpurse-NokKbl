@@ -13,14 +13,13 @@ import java.util.Comparator;
 public class Purse {
 	/** Collection of objects in the purse. */
 	private List<Valuable> money;
-	/** default currency */
-	private static final String CURRENCY = "Baht";
-	
 	/**
 	 * Capacity is maximum number of items the purse can hold. Capacity is set when
 	 * the purse is created and cannot be changed.
 	 */
 	private final int capacity;
+	/** default currency */
+	private static final String CURRENCY = "Baht";
 	private Comparator<Valuable> cmp = new ValueComparator();
 	
 	/**
