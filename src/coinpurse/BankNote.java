@@ -7,7 +7,6 @@ package coinpurse;
 public class BankNote extends Money {
 	/** the serial number of the purse */
 	private long serialNumber;
-	private static long nextSerialNumber = 1000000;
 	
 	/**
 	 * Make sure that the value must not be negative,
@@ -15,9 +14,9 @@ public class BankNote extends Money {
 	 * @param value is value of banknote
 	 * @param currency is money's currency
 	 */
-	public BankNote(double value, String currency) {
+	public BankNote(double value, String currency, long serialNumber) {
 		super(value, currency);
-		this.serialNumber = nextSerialNumber++;
+		this.serialNumber = serialNumber;
 	}
 	
 	/**
@@ -34,6 +33,6 @@ public class BankNote extends Money {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%.2f-%s note [%d]", this.getValue(), this.getCurrency(), this.getSerial());
+		return String.format("%.0f-%s note [%d]", this.getValue(), this.getCurrency(), this.getSerial());
 	}
 }

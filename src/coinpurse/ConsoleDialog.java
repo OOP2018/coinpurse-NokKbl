@@ -21,6 +21,7 @@ public class ConsoleDialog {
 	// The dialog receives a Purse object by dependency injection (as parameter to constructor)
     // so don't create a Purse here.
     private Purse purse;
+	private MoneyFactory moneyFactory = MoneyFactory.getInstance();
     
     /** 
      * Initialize a new Purse dialog.
@@ -35,7 +36,7 @@ public class ConsoleDialog {
         String choice = "";
         String prompt = FULL_PROMPT;
         loop: while( true ) {
-            System.out.printf("Purse contains %.2f %s\n", purse.getBalance(), CURRENCY );
+        		System.out.printf("Purse contains %.2f %s\n", purse.getBalance(), CURRENCY );
             if ( purse.isFull() ) System.out.println("Purse is FULL.");
             // print a list of choices
             System.out.print(prompt);
@@ -82,17 +83,12 @@ public class ConsoleDialog {
         Scanner scanline = new Scanner(inline);
         while( scanline.hasNextDouble() ) {
             double value = scanline.nextDouble();
-            if(value < 20) {
-            		Valuable coin = makeMoney(value);
-            		System.out.printf("Deposit %s... ", coin.toString() );
-            		boolean ok = purse.insert(coin);
-            		System.out.println( (ok? "ok" : "FAILED") );
-            } else {
-            		Valuable bankNote = makeMoney(value);
-            		System.out.printf("Deposit %s... ", bankNote.toString() );
-            		boolean ok = purse.insert(bankNote);
-            		System.out.println( (ok? "ok" : "FAILED") );
-            }
+            	Valuable money = makeMoney(value);
+            	if(money == null) continue;
+            	System.out.printf("Deposit %s... ", money.toString() );
+            	boolean ok = purse.insert(money);
+            	System.out.println( (ok? "ok" : "FAILED") );
+            
         }
         if ( scanline.hasNext() )
             System.out.println("Invalid input: "+scanline.next() );
@@ -132,8 +128,12 @@ public class ConsoleDialog {
     
     /** Make a Coin (or BankNote or whatever) using requested value. */
     private Valuable makeMoney(double value) {
-    	if(value < 20) return new Coin(value, CURRENCY);
-    	else return new BankNote(value, CURRENCY);
-    }
-
+    		Valuable valuable = null;
+    		try {
+    			valuable = moneyFactory.createMoney(value);
+    		} catch(IllegalArgumentException ex) {
+    			System.out.println("Sorry, "+ value + " is not a valid amount.");
+    		}
+    		return valuable;
+    	}
 }
