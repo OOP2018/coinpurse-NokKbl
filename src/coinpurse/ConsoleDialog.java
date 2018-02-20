@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 public class ConsoleDialog {
 	// default currency for this dialog
-	public static String currency;
+	public static String currency = "Baht";
     // use a single java.util.Scanner object for reading all input
     private static Scanner console = new Scanner( System.in );
     // Long prompt shown the first time
@@ -28,8 +28,8 @@ public class ConsoleDialog {
      * @param purse is the Purse to interact with.
      */
     public ConsoleDialog(Purse purse, String currency) {
-    	this.purse = purse;
-    	this.currency = currency;
+    		this.purse = purse;
+    		this.currency = currency;
     }
     
     /** Run the user interface. */

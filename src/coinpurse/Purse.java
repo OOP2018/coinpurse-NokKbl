@@ -19,7 +19,7 @@ public class Purse {
 	 */
 	private final int capacity;
 	/** default currency */
-	private static final String CURRENCY = "Baht";
+	private static String currency = "Baht";
 	private Comparator<Valuable> cmp = new ValueComparator();
 	
 	/**
@@ -125,7 +125,7 @@ public class Purse {
 	 *         requested amount.
 	 */
 	public Valuable[] withdraw(double amount) {
-		return withdraw(new Money(amount, CURRENCY));
+		return withdraw(new Money(amount, Main.init()));
 	}
 
 	/**
