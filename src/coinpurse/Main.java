@@ -12,7 +12,7 @@ public class Main {
 	/**
 	 * This method use to get an instance of money factory from purse file to use.
 	 */
-	public static void init() {
+	public static String init() {
 		ResourceBundle bundle = ResourceBundle.getBundle("purse");
 		String factoryclass = bundle.getString("moneyfactory");
 		MoneyFactory factory = null;
@@ -30,6 +30,7 @@ public class Main {
 		}
 		// if no factory then quit
 		if (factory == null) System.exit(1);
+		return bundle.getString("currency");
 	}
 	
     /**
@@ -37,11 +38,11 @@ public class Main {
      * @param args not used
      */
     public static void main( String[] args ) {
-    		Main.init();
+    		String curr = Main.init();
     		// 1. create a Purse
     		Purse purse = new Purse(10);
         // 2. create a ConsoleDialog with a reference to the Purse object
-    		ConsoleDialog ui = new ConsoleDialog(purse);
+    		ConsoleDialog ui = new ConsoleDialog(purse, curr);
         // 3. run the ConsoleDialog
     		ui.run();
     }
