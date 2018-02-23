@@ -10,8 +10,6 @@ public abstract class MoneyFactory {
 	/** singleton instance of MoneyFactory. */
 	private static MoneyFactory factory;
 	
-	protected MoneyFactory() { }
-	
 	/**
 	 * Get an instance of MoneyFactory. if factory is null,
 	 * the default MoneyFactory will be ThaiMoneyFactory.
@@ -42,7 +40,7 @@ public abstract class MoneyFactory {
 		 try {
 		 val = Double.parseDouble(value);
 		 } catch (NumberFormatException ex) {
-			 throw new IllegalArgumentException(ex.getMessage());
+			 throw new IllegalArgumentException(ex.getMessage(),ex);
 		 }
 		 return createMoney(val);
 	}

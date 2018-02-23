@@ -31,7 +31,7 @@ public class MalayMoneyFactory extends MoneyFactory{
 		double[] banknotes = {1, 2, 5, 10, 20, 50, 100};
 		
 		for (double val : coins) {
-			if(value == val) return new Coin(value*100, "Sen");
+			if(value == val) return new Coin(value, "Ringgit");
 		}
 		
 		for (double val : banknotes) {
