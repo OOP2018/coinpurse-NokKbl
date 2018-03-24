@@ -17,7 +17,7 @@ public class Money implements Valuable{
 	 * @param currency is money's currency
 	 */
 	public Money(double value, String currency) {
-		if(value < 0) throw new IllegalArgumentException("Money must be more than 0.");
+		if(value <= 0) this.value = 0.0; //throw new IllegalArgumentException("Money must be more than 0.");
 		this.value = value;
 		this.currency = currency;
 	}

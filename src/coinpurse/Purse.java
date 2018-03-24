@@ -106,8 +106,9 @@ public class Purse {
 		if(amount.getValue() <= 0 || amount == null || money.isEmpty() || amount.getValue() > this.getBalance()) return null;
 		List<Valuable> tempList = new ArrayList<Valuable>();
 		
-		if(strategy.withdraw(amount, money) == null) return null;
+		if(strategy.withdraw(amount, money) == null || strategy.withdraw(amount, money).size() == 0) return null;
 		tempList.addAll(strategy.withdraw(amount, money));
+		
 		for (Valuable val : tempList) money.remove(val);
 		Valuable[] withdrawCoin = new Valuable[tempList.size()];
 		return tempList.toArray(withdrawCoin);

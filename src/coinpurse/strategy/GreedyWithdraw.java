@@ -44,7 +44,9 @@ public class GreedyWithdraw implements WithdrawStrategy {
 			if(amountNeededToWithdraw == 0) break;
 		}
 		
-		if (amountNeededToWithdraw != 0 || tempList.isEmpty()) return null;
+		if(tempList.isEmpty()) return new ArrayList<>();
+		if (amountNeededToWithdraw != 0) return null;
+		
 		return tempList;
 	}
 

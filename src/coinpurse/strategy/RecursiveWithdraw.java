@@ -1,7 +1,6 @@
 package coinpurse.strategy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import coinpurse.Money;
@@ -12,7 +11,7 @@ import coinpurse.Valuable;
  * @author Kunyaruk Katebunlu
  */
 public class RecursiveWithdraw implements WithdrawStrategy {
-	//private static List<Valuable> list = new ArrayList<Valuable>();
+	private static List<Valuable> result = new ArrayList<Valuable>();
 	
 	/**
 	 * Find and return items from a collection whose total value equals the requested amount.
@@ -26,47 +25,20 @@ public class RecursiveWithdraw implements WithdrawStrategy {
 	 */
 	@Override
 	public List<Valuable> withdraw(Valuable amount, List<Valuable> money) {
-		
-		if(amount.getValue() <= 0 || money.size() == 0) return null;
+		if(amount.getValue() == 0) return new ArrayList<Valuable>();
+		if(amount.getValue() < 0 || money.size() == 0) return null;
 		
 		Valuable first = money.get(0);
-		Valuable remaining;
-		List<Valuable> result;
-		if(amount.getCurrency().equalsIgnoreCase(first.getCurrency())) {
-			if(amount.getValue() - first.getValue() < 0) return withdraw(amount, money.subList(1, money.size()));
-			remaining = new Money(amount.getValue() - first.getValue(), amount.getCurrency());
-			//list.add(first);
+		if(amount.getCurrency().equals(money.get(0).getCurrency())) {
+			Valuable remaining = new Money(amount.getValue() - money.get(0).getValue(), amount.getCurrency());
 			result = withdraw(remaining, money.subList(1, money.size()));
 			if(result != null) {
 				result.add(first);
-				return leave(result);
+				return result;
 			}
+			return withdraw(amount, money.subList(1, money.size()));
 		}
-		result = withdraw(amount, money.subList(1, money.size()));
-		if(result != null) return leave(result);
-		return result;
-	}
-	
-	public List<Valuable> leave(List<Valuable> result){
-		System.out.println(result.toArray());
-		return result;
-	}
-	
-	public static void main(String[] args) {
-		WithdrawStrategy w = new RecursiveWithdraw();
-		Money m = new Money(10.0, "Baht");
-		Money n = new Money(5.0, "Baht");
-		Money o = new Money(10.0, "Baht");
-		Money p = new Money(10.0, "Baht");
-		
-		List<Valuable> x = new ArrayList<>();
-		x.add(m);
-		x.add(n);
-		x.add(o);
-		x.add(p);
-		System.out.println(m.getValue());
-		System.out.println(x.size());
-		System.out.println(w.withdraw(new Money(20, "Baht"), x));
+		return new ArrayList<Valuable>();
 	}
 
 }
