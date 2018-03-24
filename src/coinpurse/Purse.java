@@ -1,6 +1,11 @@
 package coinpurse;
 
 import java.util.List;
+
+import coinpurse.strategy.GreedyWithdraw;
+import coinpurse.strategy.RecursiveWithdraw;
+import coinpurse.strategy.WithdrawStrategy;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +26,7 @@ public class Purse {
 	/** default currency */
 	private static String currency = "Baht";
 	private Comparator<Valuable> cmp = new ValueComparator();
+	private WithdrawStrategy strategy = null;
 	
 	/**
 	 * Create a purse with a specified capacity.
@@ -29,6 +35,11 @@ public class Purse {
 	public Purse(int capacity) {
 		this.capacity = capacity;
 		money = new ArrayList<Valuable>();
+		strategy = new GreedyWithdraw();
+	}
+	
+	public void setWithdrawStrategy(WithdrawStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	/**
@@ -92,25 +103,11 @@ public class Purse {
 	 *         requested amount.
 	 */
 	public Valuable[] withdraw(Valuable amount) {
-		List<Valuable> moneyCopy = MoneyUtil.filterByCurrency(money, amount.getCurrency());
-		
-		if(amount.getValue() <= 0 || amount == null || money.isEmpty()) return null;
-		
-		Collections.sort(moneyCopy, cmp);
-		Collections.reverse(moneyCopy);
-
-		double amountNeededToWithdraw = amount.getValue();
+		if(amount.getValue() <= 0 || amount == null || money.isEmpty() || amount.getValue() > this.getBalance()) return null;
 		List<Valuable> tempList = new ArrayList<Valuable>();
 		
-		for (Valuable value : moneyCopy) {
-			if(amountNeededToWithdraw >= value.getValue()) {
-				amountNeededToWithdraw -= value.getValue();
-				tempList.add(value);
-			}
-			if(amountNeededToWithdraw == 0) break;
-		}
-		
-		if (amountNeededToWithdraw != 0 || tempList.isEmpty()) return null;
+		if(strategy.withdraw(amount, money) == null) return null;
+		tempList.addAll(strategy.withdraw(amount, money));
 		for (Valuable val : tempList) money.remove(val);
 		Valuable[] withdrawCoin = new Valuable[tempList.size()];
 		return tempList.toArray(withdrawCoin);
