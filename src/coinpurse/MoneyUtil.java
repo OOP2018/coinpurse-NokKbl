@@ -1,110 +1,76 @@
 package coinpurse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * MoneyUtil use to demonstrate compareTo() method,
- *  sort the coins by value of the coins
- *  or currency value and print list of coins.
+ * MoneyUtil use to demonstrate compareTo() method, sort the coins by value of any stuff that implements Valuable
+ *  or filter any stuff that implements Valuable by currency.
  * @author Kunyaruk Katebunlu
  */
 public class MoneyUtil {
 	private static Comparator<Valuable> cmp = new ValueComparator();
 	
 	/**
-	 * Print a list of the coins.
-	 * @param coins is list of coins that need to print
-	 */
-	public static void printCoins(List<Coin> coins) {
-		for (Coin coin : coins) System.out.print(coin+ " ");
-		System.out.println();
-	}
-	
-	/**
-	 * Print a list of the money.
-	 * @param val is list of money that need to print
-	 */
-	public static void printVal(List<Valuable> val) {
-		for (Valuable valuable : val) {
-			if(valuable.getValue() == 0) System.out.print("");
-			else System.out.print(valuable+" ");
-		}
-		System.out.println();
-	}
-	
-	/**
-	 * To demonstrate that compareTo() method is correct and
-	 * sort the coins by value.
-	 */
-	public static void sortAndCompareCoin() {
-		List<Coin> coins = new ArrayList<Coin>();
-		
-		coins.add(new Coin(10.0, "Baht"));
-		coins.add(new Coin(0.5, "Baht"));
-		coins.add(new Coin(2.0, "Baht"));
-		coins.add(new Coin(0.25, "Baht"));
-		
-		// same value but difference currency
-		coins.add(new Coin(1.0, "Baht"));
-		coins.add(new Coin(1.0, "Rupie"));
-		coins.add(new Coin(1.0, "baht"));
-		
-		// unsorted a list of coins
-		System.out.println("Unsorted money");
-		printCoins(coins);
-				
-		System.out.println("-----------");
-		// sorted
-		Collections.sort(coins, cmp);
-		System.out.println("Sorted money");
-		printCoins(coins);
-		
-		System.out.println("-----------");
-		// Test compareTo() method
-		System.out.printf("%.2f compare to %.2f\n", coins.get(0).getValue(), coins.get(2).getValue());
-		System.out.println("Result: " + coins.get(0).compareTo(coins.get(2)));
-		System.out.printf("%.2f compare to %.2f\n", coins.get(3).getValue(), coins.get(1).getValue());
-		System.out.println("Result: " + coins.get(3).compareTo(coins.get(1)));
-		System.out.printf("%.2f compare to %.2f\n", coins.get(4).getValue(), coins.get(4).getValue());
-		System.out.println("Result: " + coins.get(4).compareTo(coins.get(4)));
-		
-		System.out.println("-----------");
-		
-		// Filter only coin that has same currency
-		List<Valuable> money = new ArrayList<Valuable>();
-		money.addAll(coins);
-		sortMoney(money);
-		System.out.println("Filter money");
-		printVal(filterByCurrency(money, "Baht"));
-	}
-	
-	/**
-	 * Filter coins by use the specified currency value of the coins.
-	 * @param coins is list of coins with many currency value
+	 * Filter any stuff that implements Valuable by use the specified currency value.
+	 * @param valuable is list of money with many currency value
 	 * @param currency is currency value that want to use
-	 * @return list of coins with the same currency value
+	 * @return list of any stuff that implements Valuable with the same currency value
 	 */
-	public static List<Valuable> filterByCurrency(List<Valuable> money, String currency) {
-		List<Valuable> moneyCopy = new ArrayList<Valuable>();
-		moneyCopy.addAll(money);
-		for (Valuable value : new ArrayList<>(moneyCopy)) {
-			if(!value.getCurrency().equalsIgnoreCase(currency)) moneyCopy.remove(value);
+	public static <E extends Valuable> List<E> filterByCurrency(List<E> valuable, String currency) {
+		List<E> moneyCopy = new ArrayList<E>();
+		moneyCopy.addAll(valuable);
+		for (E val : new ArrayList<>(moneyCopy)) {
+			if(!val.getCurrency().equalsIgnoreCase(currency)) moneyCopy.remove(val);
 		}
 		return moneyCopy;
 	}
 	
 	/**
-	 * Sort money by use the value of the valuable and print.
-	 * @param val is the list of money that want to sort
+	 * Sort list of any stuff that implements Valuable by the value of the valuable.
+	 * @param valuable is the list of money that want to sort
 	 */
-	public static void sortMoney(List<Valuable> val) {
-		Collections.sort(val, cmp);
+	public static void sortMoney(List<? extends Valuable> valuable) {
+		Collections.sort(valuable, cmp);
+	}
+	
+	/**
+	 * Return the larger argument, based on sort order, using
+	 * the objects' own compareTo method for comparing.
+	 * @param args one or more Comparable objects to compare.
+	 * @return the argument that would be last if sorted the elements.
+	 * @throws IllegalArgumentException if no arguments given.
+	 */
+	public static <E extends Comparable<? super E>> E max(E ... args) {
+		if(args == null || args.length == 0) throw new IllegalArgumentException();
+		E max = args[0];
+		for(int n = 0;n<args.length;n++) {
+			max = (args[n].compareTo(max) > 0) ? args[n] : max;
+		}
+		return max;
 	}
 	
 	public static void main(String[] args) {
-		sortAndCompareCoin();
+		String max = MoneyUtil.max("dog", "zebra", "cat");
+		System.out.println(max);
+		
+		Money m1 = new BankNote(100, "Baht", 123);
+		Money m2 = new BankNote(500, "Baht", 1234);
+		Money m3 = new Coin(20, "Baht");
+		Money maxx = MoneyUtil.max(m1,m2,m3);
+		System.out.println(maxx);
+		
+		List<BankNote> list = new ArrayList<BankNote>();
+		list.add(new BankNote(10.0, "USD", 10101));
+		list.add(new BankNote(500.0, "Baht", 1010000));
+		MoneyUtil.sortMoney(list);
+		System.out.println(Arrays.toString(list.toArray()));
+		
+		List<Coin> coins = Arrays.asList(new Coin(5, "Baht"), new Coin(0.1, "Ringgit"), new Coin(5, "Cent"));
+		List<Coin> result = MoneyUtil.filterByCurrency(coins, "Baht");
+		System.out.println(Arrays.toString(result.toArray()));
 	}
 }
